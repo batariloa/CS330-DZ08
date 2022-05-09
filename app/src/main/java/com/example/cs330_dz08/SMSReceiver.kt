@@ -3,28 +3,31 @@ package com.example.cs330_dz08
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import android.telephony.SmsMessage
-import android.util.Log
-const val SMS_BUNDLE: String = "pdus"
-class SMSReceiver : BroadcastReceiver() {
+import android.os.Looper
+import android.provider.Telephony
+import android.widget.Toast
 
+
+class SMSReceiver()
+    : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
-        val body: StringBuilder = StringBuilder()
-        var number = ""
-        val bundle: Bundle? = intent.extras
-        val messages: Array<SmsMessage?>
-        if (bundle != null) {
-            println("BLOP BLOP")
-            val msgObjects: Array<*>? = bundle.get(SMS_BUNDLE) as Array<*>?
-            messages = arrayOfNulls(msgObjects!!.size)
-            for (i in messages.indices) {
-                messages[i] = SmsMessage.createFromPdu(msgObjects[i] as ByteArray?)
-                body.append(messages[i]!!.messageBody)
-                number = messages[i]!!.originatingAddress.toString()
-            }
+
+        for (smsMessage in Telephony.Sms.Intents.getMessagesFromIntent(intent)) {
+            val messageBody = smsMessage.messageBody
+            Toast.makeText(context, messageBody.toString(), Toast.LENGTH_SHORT).show()
+
         }
 
+        }
+
+
+    fun runOnMainThread(runnable: Runnable){
+        val uiHandler:android.os.Handler = android.os.Handler(Looper.getMainLooper())
+        uiHandler.post(runnable)
     }
+
+
+
+
 }
