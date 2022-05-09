@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
 
         requestSmsPermission()
 
-        Log.d("What the", "what the flip")
         val smsBtn = findViewById<ImageButton>(R.id.btn_sms)
         val emailBtn = findViewById<ImageButton>(R.id.btn_email)
 
